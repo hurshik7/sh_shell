@@ -6,20 +6,9 @@
 
 #define MAX (255)
 
-void *prompt(char cBuf[])
-{
-    void *ret;
+void* prompt(char cBuf[]);
 
-    printf("sh_shell > ");
-    ret = fgets(cBuf, MAX, stdin);
-
-    if (cBuf[strlen(cBuf)-1] == '\n') {
-        cBuf[strlen(cBuf) - 1] = 0;
-    }
-    return ret;
-}
-
-int main()
+int main(int argc, char* argv[])
 {
     char cBuf[MAX];
     char *arg[4];
@@ -53,16 +42,15 @@ int main()
             else if (*arg[1] != '|') {			// (2) one argument
                 arg[2] = 0;
                 // cd command
-                if(strcmp(arg[0], "cd")==0) {
+                if (strcmp(arg[0], "cd") == 0) {
                     chdir(arg[1]);
                 }
-                else{	// another command
-                    if(execvp(arg[0], arg) < 0){
+                else {    // another command
+                    if (execvp(arg[0], arg) < 0) {
                         printf("%s: command not found\n", arg[0]);
                         exit(0);
                     }
                 }
-
             }
             else {								// (3) pipe
                 arg[2] = strtok(NULL, " ");
@@ -79,16 +67,16 @@ int main()
                     arg_p[0] = arg[0];
                     arg_p[1] = 0;
 
-                    if(execvp(arg[0],arg_p) < 0){
+                    if (execvp(arg[0],arg_p) < 0) {
                         printf("%s: command not found\n", arg[0]);
                         exit(0);
                     }
                 }
-                else if (pipe_p1 < 0){
+                else if (pipe_p1 < 0) {
                     perror("fork error");
                 }
 
-                if((pipe_p2=fork()) == 0){
+                if ((pipe_p2=fork()) == 0) {
                     close(0);		// close stdin
                     close(fd[1]);	// close piepe write
                     dup(fd[0]);		// dup pipe read at stdin
@@ -96,7 +84,7 @@ int main()
 
                     arg_p[0] = arg[2]; arg_p[1] = 0;
 
-                    if(execvp(arg[2],arg_p) < 0){
+                    if (execvp(arg[2],arg_p) < 0) {
                         printf("%s: command not found\n", arg[0]);
                         exit(0);
                     }
@@ -104,7 +92,7 @@ int main()
                     perror("child2 execvp failed");
                     exit(1);
                 }
-                else if(pipe_p2 < 0){
+                else if(pipe_p2 < 0) {
                     perror("fork error");
                 }
                 close(fd[1]);
@@ -117,4 +105,17 @@ int main()
         waitpid(pid, &status, 0);
     }
     return 0;
+}
+
+void* prompt(char cBuf[])
+{
+    void *ret;
+
+    printf("sh_shell > ");
+    ret = fgets(cBuf, MAX, stdin);
+
+    if (cBuf[strlen(cBuf)-1] == '\n') {
+        cBuf[strlen(cBuf) - 1] = 0;
+    }
+    return ret;
 }
