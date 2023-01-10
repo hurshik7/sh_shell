@@ -1,3 +1,4 @@
+#include <limits.h>
 #include <stdio.h>	// printf
 #include <stdlib.h> // exit
 #include <string.h> // perror, strlen
@@ -111,7 +112,13 @@ void* prompt(char cBuf[])
 {
     void *ret;
 
-    printf("sh_shell > ");
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("sh_shell > [%s] ", cwd);
+    } else {
+        perror("getcwd() error");
+    }
+
     ret = fgets(cBuf, MAX, stdin);
 
     if (cBuf[strlen(cBuf)-1] == '\n') {
