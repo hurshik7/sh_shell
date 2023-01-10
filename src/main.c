@@ -19,20 +19,19 @@ int main(int argc, char* argv[])
     int fd[2];
 
     while (prompt(cBuf)) {	// while successful input
+        if (strcmp(cBuf, "exit") == 0) {
+            printf("exit sh_shell, Bye.\n");
+            break;
+        }
+
         if ((pid=fork()) < 0) {
             perror("fork error");
         }
-        else if (pid ==0) {	// child
+        else if (pid == 0) {	// child
             // 명령어 공백기준 분할
             arg[0] = strtok(cBuf," ");
             // 자른 문자 다음부터 구분자 또 찾기
             arg[1] = strtok(NULL, " ");
-
-            if (strcmp(arg[0], "exit") == 0) {
-                printf("exit sh_shell\n");
-                exit(0);
-                // 이거 잘 안됨. 일단 공부부터!
-            }
 
             if (arg[1] == NULL) {					//	(1) no argument
                 if (execvp(arg[0], arg) < 0) {
