@@ -20,7 +20,6 @@
 //
 //    while (prompt(cBuf)) {	// while successful input
 //        if (strcmp(cBuf, "exit") == 0) {
-//            printf("exit sh_shell, Bye.\n");
 //            exit(0);
 //        }
 //
@@ -44,15 +43,13 @@
 //                // cd command
 //                if (strcmp(arg[0], "cd") == 0) {
 //                    chdir(arg[1]);
-//                }
-//                else {    // another command
+//                } else {    // another command
 //                    if (execvp(arg[0], arg) < 0) {
 //                        printf("%s: command not found\n", arg[0]);
 //                        exit(0);
 //                    }
 //                }
-//            }
-//            else {								// (3) pipe
+//            } else {								// (3) pipe
 //                arg[2] = strtok(NULL, " ");
 //                arg[3] = 0;
 //
@@ -100,9 +97,9 @@
 //                wait(0);
 //                wait(0);
 //            }
+//        } else {
+//            waitpid(pid, &status, 0);
 //        }
-//
-//        waitpid(pid, &status, 0);
 //    }
 //    return 0;
 //}
@@ -130,21 +127,24 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/syslimits.h>
+
 
 #define MAX_LINE_LENGTH (1024)
+#define MAX (255)
 
-int main(int argc, char** argv) {
+
+void* prompt(char cBuf[]);
+
+
+int main(int argc, char* argv[]) {
     char command_line[MAX_LINE_LENGTH];
 
-    while (1) {
-        printf("$ ");
-        fgets(command_line, MAX_LINE_LENGTH, stdin);
-
+    while (prompt(command_line)) {
         // Parse the command line into tokens
         char* command = strtok(command_line, " ");
-        char* args[MAX_LINE_LENGTH];
+        char* args[MAX_LINE_LENGTH] = { NULL };
         int i = 0;
         while (command != NULL) {
             args[i++] = command;
@@ -161,10 +161,27 @@ int main(int argc, char** argv) {
         // Execute the command
         if (strcmp(args[0], "exit") == 0) {
             break;
-        } else {
+        }
+        else if (strcmp(args[0], "cd") == 0) {
+            // ~ 랑 아무 것도 없을 때 처리 TODO
+            if (args[1] == NULL) {
+                chdir("/");
+            } else if (strcmp(args[1], "~") == 0) {
+                char *homedir;
+                homedir = getenv("HOME");
+                if (homedir != NULL) {
+                    chdir(homedir);
+                }
+            } else {
+                if (chdir(args[1]) < 0) {
+                    printf("cd: no such file or directory: %s\n", args[1]);
+                }
+            }
+        }
+        else {
             pid_t child_pid = fork();
             if (child_pid == 0) {
-                // This is the child process
+                // child process
                 int result;
                 result = execvp(args[0], args);
                 if (result < 0) {
@@ -172,11 +189,30 @@ int main(int argc, char** argv) {
                     exit(0);
                 }
             } else {
-                // This is the parent process
+                // parent process
                 waitpid(child_pid, NULL, 0);
             }
         }
     }
 
     return 0;
+}
+
+void* prompt(char cBuf[])
+{
+    void *ret;
+
+    char cwd[PATH_MAX];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        printf("sh_shell > [%s] ", cwd);
+    } else {
+        perror("getcwd() error");
+    }
+
+    ret = fgets(cBuf, MAX, stdin);
+
+    if (cBuf[strlen(cBuf)-1] == '\n') {
+        cBuf[strlen(cBuf) - 1] = 0;
+    }
+    return ret;
 }
