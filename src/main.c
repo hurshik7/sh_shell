@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
             break;
         }
         else if (strcmp(args[0], "cd") == 0) {
-            // ~ 랑 아무 것도 없을 때 처리 TODO
+            // TODO test
             if (args[1] == NULL) {
                 chdir("/");
             } else if (strcmp(args[1], "~") == 0) {
