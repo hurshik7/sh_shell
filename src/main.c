@@ -201,6 +201,7 @@ int main(int argc, char* argv[]) {
 void* prompt(char cBuf[])
 {
     void *ret;
+    // TODO PS1 체크하고 그거대로 prompt
 
     char cwd[PATH_MAX];
     if (getcwd(cwd, sizeof(cwd)) != NULL) {
