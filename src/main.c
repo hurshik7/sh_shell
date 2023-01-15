@@ -183,6 +183,7 @@ int main(int argc, char* argv[]) {
             }
         }
         else {
+            // TODO ./a.out 이런거 가능하게 처리
             pid_t child_pid = fork();
             if (child_pid == 0) {
                 // child process
