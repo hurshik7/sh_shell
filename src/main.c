@@ -142,6 +142,9 @@ int main(int argc, char* argv[]) {
     char command_line[MAX_LINE_LENGTH];
 
     while (prompt(command_line)) {
+        if (command_line[0] == '\0') {
+            continue;
+        }
         // Parse the command line into tokens
         char* command = strtok(command_line, " ");
         char* args[MAX_LINE_LENGTH] = { NULL };
@@ -174,6 +177,7 @@ int main(int argc, char* argv[]) {
                 }
             } else {
                 if (chdir(args[1]) < 0) {
+                    // TODO cd errno 처리
                     printf("cd: no such file or directory: %s\n", args[1]);
                 }
             }
@@ -201,19 +205,53 @@ int main(int argc, char* argv[]) {
 void* prompt(char cBuf[])
 {
     void *ret;
-    // TODO PS1 체크하고 그거대로 prompt
+    char *ps1 = getenv("PS1");
+    char *username = getlogin();
+    char hostname[256];
+    gethostname(hostname, sizeof(hostname));
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
 
-    char cwd[PATH_MAX];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-        printf("sh_shell > [%s] ", cwd);
+    if (ps1 != NULL) {
+        char *display_line = ps1;
+        while (*display_line != '\0') {
+            if (*display_line == '\\') {
+                ++display_line;
+                switch (*display_line) {
+                    case 'u':
+                        printf("%s", username);
+                        break;
+                    case 'h':
+                        printf("%s", hostname);
+                        break;
+                    case 'w':
+                        printf("%s", cwd);
+                        break;
+                    case '$':
+                        if (geteuid() == 0) {
+                            putchar('#');
+                        } else {
+                            putchar('$');
+                        }
+                        break;
+                    default:
+                        putchar(*display_line);
+                        break;
+                }
+            } else {
+                putchar(*display_line);
+            }
+            ++display_line;
+        }
     } else {
-        perror("getcwd() error");
+        printf("[%s] $ ", cwd);
     }
+    fflush(stdout);
 
     ret = fgets(cBuf, MAX, stdin);
 
     if (cBuf[strlen(cBuf)-1] == '\n') {
-        cBuf[strlen(cBuf) - 1] = 0;
+        cBuf[strlen(cBuf) - 1] = '\0';
     }
     return ret;
 }
