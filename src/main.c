@@ -128,7 +128,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#include <sys/syslimits.h>
+#include <limits.h>
 
 
 #define MAX_LINE_LENGTH (1024)
@@ -136,9 +136,11 @@
 
 
 void* prompt(char cBuf[]);
+int is_path(const char *input);
 
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
     char command_line[MAX_LINE_LENGTH];
 
     while (prompt(command_line)) {
@@ -183,10 +185,18 @@ int main(int argc, char* argv[]) {
             }
         }
         else {
-            // TODO ./a.out 이런거 가능하게 처리
+            // TODO ./a.out 이런거 가능하게 처리 -> 일단 완료, 테스트 해야함
             pid_t child_pid = fork();
             if (child_pid == 0) {
                 // child process
+                if (is_path(args[0])) {
+                    char abs_path[PATH_MAX];
+                    char *res = realpath(args[0], abs_path);
+                    if (res) {
+                        execv(abs_path, args);
+                    }
+                }
+
                 int result;
                 result = execvp(args[0], args);
                 if (result < 0) {
@@ -255,4 +265,9 @@ void* prompt(char cBuf[])
         cBuf[strlen(cBuf) - 1] = '\0';
     }
     return ret;
+}
+
+int is_path(const char *input)
+{
+    return strchr(input, '/') != NULL;
 }
