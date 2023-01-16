@@ -129,6 +129,8 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <limits.h>
+#include <sys/errno.h>
+#include <assert.h>
 
 
 #define MAX_LINE_LENGTH (1024)
@@ -179,8 +181,25 @@ int main(int argc, char* argv[])
                 }
             } else {
                 if (chdir(args[1]) < 0) {
-                    // TODO cd errno 처리
-                    printf("cd: no such file or directory: %s\n", args[1]);
+                    switch (errno) {
+                        case EACCES:
+                            printf("cd: permission denied: %s\n", args[1]);
+                            break;
+                        case ELOOP:
+                            printf("cd: too many symbolic links: %s\n", args[1]);
+                            break;
+                        case ENAMETOOLONG:
+                            printf("cd: file name too long: %s\n", args[1]);
+                            break;
+                        case ENOENT:
+                            printf("cd: no such file or directory: %s\n", args[1]);
+                            break;
+                        case ENOTDIR:
+                            printf("cd: not a directory: %s\n", args[1]);
+                            break;
+                        default:
+                            assert("cannot be here");
+                    }
                 }
             }
         }
