@@ -1,11 +1,11 @@
+#include <assert.h>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <limits.h>
 #include <sys/errno.h>
-#include <assert.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 
 #define MAX_LINE_LENGTH (1024)
@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
 {
     char command_line[MAX_LINE_LENGTH];
 
+    // TODO implement the redirect feature
     while (prompt(command_line)) {
         if (command_line[0] == '\0') {
             continue;
@@ -46,9 +47,7 @@ int main(int argc, char* argv[])
         }
         else if (strcmp(args[0], "cd") == 0) {
             // TODO test
-            if (args[1] == NULL) {
-                chdir("/");
-            } else if (strcmp(args[1], "~") == 0) {
+            if (args[1] == NULL || (strcmp(args[1], "~") == 0)) {
                 char *homedir;
                 homedir = getenv("HOME");
                 if (homedir != NULL) {
@@ -80,6 +79,7 @@ int main(int argc, char* argv[])
         }
         else {
             // TODO ./a.out 이런거 가능하게 처리 -> 일단 완료, 테스트 해야함
+            // TODO arguments에도 path인 값들이 있을 수 있음 -> 처리해야함
             pid_t child_pid = fork();
             if (child_pid == 0) {
                 // child process
