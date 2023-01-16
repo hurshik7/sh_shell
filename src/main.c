@@ -80,6 +80,7 @@ int main(int argc, char* argv[])
         else {
             // TODO ./a.out 이런거 가능하게 처리 -> 일단 완료, 테스트 해야함
             // TODO arguments에도 path인 값들이 있을 수 있음 -> 처리해야함
+            // TODO exec 함수 errno 처리
             pid_t child_pid = fork();
             if (child_pid == 0) {
                 // child process
