@@ -9,8 +9,17 @@ set(CMAKE_C_STANDARD 17)
 
 set(SOURCE_DIR ${PROJECT_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include)
-set(SOURCE_LIST ${SOURCE_DIR}/main.c)
-set(HEADER_LIST "")
+set(SOURCE_LIST ${SOURCE_DIR}/main.c
+                ${SOURCE_DIR}/command.c
+                ${SOURCE_DIR}/util.c
+                ${SOURCE_DIR}/input.c
+                ${SOURCE_DIR}/builtins.c
+        )
+set(HEADER_LIST ${INCLUDE_DIR}/command.h
+                ${INCLUDE_DIR}/util.h
+                ${INCLUDE_DIR}/input.h
+                ${INCLUDE_DIR}/builtins.h
+        )
 
 set(SANITIZE TRUE)
 
