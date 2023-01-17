@@ -9,6 +9,7 @@
 
 
 char** tokenize_malloc(const char* str, const char* delim, size_t* out_count);
+int is_path(const char *input);
 
 
 #endif /* SH_SHELL_UTIL_H */

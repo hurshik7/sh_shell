@@ -36,6 +36,9 @@ char** tokenize_malloc(const char* str, const char* delim, size_t* out_count)
         }
         ret[word_count - 1] = malloc((word_length + 1) * sizeof(char));
         strcpy(ret[word_count - 1], token);
+        if (ret[word_count - 1][strlen(ret[word_count - 1]) - 1] == '\n') {
+            ret[word_count - 1][strlen(ret[word_count - 1]) - 1] = '\0';
+        }
 
         token = strtok(NULL, delim);
     }
@@ -47,4 +50,9 @@ free_and_exit:
     free(temp_str);
     temp_str = NULL;
     return ret;
+}
+
+int is_path(const char *input)
+{
+    return strchr(input, '/') != NULL;
 }
