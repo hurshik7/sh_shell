@@ -1,5 +1,6 @@
 #include "util.h"
 #include <stdlib.h>
+#include <ctype.h>
 
 char** tokenize_malloc(const char* str, const char* delim, size_t* out_count)
 {
@@ -55,4 +56,25 @@ free_and_exit:
 int is_path(const char *input)
 {
     return strchr(input, '/') != NULL;
+}
+
+void trim(char* str)
+{
+    int i = 0;
+    int j = 0;
+    while (isspace(str[i])) {
+        i++;
+    }
+
+    if (str[i] == '\0') {
+        str[0] = '\0';
+        return;
+    }
+
+    while (str[i]) {
+        str[j++] = str[i++];
+    }
+    while (isspace(str[--j])) {
+        str[j] = '\0';
+    }
 }

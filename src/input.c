@@ -1,4 +1,5 @@
 #include "input.h"
+#include "util.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -75,8 +76,10 @@ char* get_command_line(char cBuf[])
         printf("exit the shell. please run again\n");
         return NULL;
     }
-    if (cBuf[strlen(cBuf)-1] == '\n') {
+
+    if (cBuf[strlen(cBuf) - 1] == '\n') {
         cBuf[strlen(cBuf) - 1] = '\0';
     }
+    trim(cBuf);
     return ret;
 }
