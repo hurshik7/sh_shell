@@ -56,8 +56,8 @@ int main(int argc, char* argv[])
             } else {
                 // parent process
                 waitpid(child_pid, NULL, 0);
-                free_command(&cmd);
             }
+            free_command(&cmd);
         }
     }
 
