@@ -1,5 +1,6 @@
 #include "builtins.h"
 #include "command.h"
+#include "execute.h"
 #include "input.h"
 #include "util.h"
 #include <limits.h>
@@ -34,29 +35,7 @@ int main(int argc, char* argv[])
             printf("%d\n", result);
         }
         else {
-            // TODO ./a.out 이런거 가능하게 처리 -> 일단 완료, 테스트 해야함
-            // TODO arguments에도 path인 값들이 있을 수 있음 -> 처리해야함
-            // TODO exec 함수 errno 처리
-            pid_t child_pid = fork();
-            if (child_pid == 0) {
-                // child process
-                if (is_path(cmd.argv[0])) {
-                    char abs_path[PATH_MAX];
-                    char *res = realpath(cmd.argv[0], abs_path);
-                    if (res) {
-                        execv(abs_path, cmd.argv);
-                    }
-                }
-
-                result = execvp(cmd.argv[0], cmd.argv);
-                if (result < 0) {
-                    printf("%s: command not found\n", cmd.argv[0]);
-                    exit(0);
-                }
-            } else {
-                // parent process
-                waitpid(child_pid, NULL, 0);
-            }
+            execute_command(&cmd);
             free_command(&cmd);
         }
     }
