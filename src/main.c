@@ -3,9 +3,7 @@
 #include "execute.h"
 #include "input.h"
 #include "util.h"
-#include <limits.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 
 #define MAX_LINE_LENGTH (2048)
@@ -42,3 +40,4 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+
