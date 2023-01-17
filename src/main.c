@@ -33,6 +33,7 @@ int main(int argc, char* argv[])
             printf("%d\n", result);
         }
         else {
+            // TODO redirect
             execute_command(&cmd);
             free_command(&cmd);
         }

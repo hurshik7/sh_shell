@@ -9,8 +9,11 @@ int parse_command_malloc(const char *line, struct command *cmd)
     cmd->argv = tokenize_malloc(line, " ", &count);
     cmd->argc = count;
 
+    // TODO command line expand 해줘야함! wordexp();
+
     for (size_t i = 0; i < count; ++i) {
-        // TODO redirect 여기다가 구현
+        // TODO redirect parsing
+
     }
 
     return 0;
