@@ -14,11 +14,13 @@ set(SOURCE_LIST ${SOURCE_DIR}/main.c
                 ${SOURCE_DIR}/util.c
                 ${SOURCE_DIR}/input.c
                 ${SOURCE_DIR}/builtins.c
+                ${SOURCE_DIR}/execute.c
         )
 set(HEADER_LIST ${INCLUDE_DIR}/command.h
                 ${INCLUDE_DIR}/util.h
                 ${INCLUDE_DIR}/input.h
                 ${INCLUDE_DIR}/builtins.h
+                ${INCLUDE_DIR}/execute.h
         )
 
 set(SANITIZE TRUE)
