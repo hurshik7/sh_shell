@@ -1,4 +1,5 @@
 #include "input.h"
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -65,6 +66,15 @@ char* get_command_line(char cBuf[])
 {
     char *ret;
     ret = fgets(cBuf, MAX_LINE_LEN, stdin);
+    if (ret == NULL) {
+        if (ferror(stdin)) {
+            printf("fgets: error reading input: %s\n", strerror(errno));
+        } else {
+            printf("fgets: end of file reached\n");
+        }
+        printf("exit the shell. please run again\n");
+        return NULL;
+    }
     if (cBuf[strlen(cBuf)-1] == '\n') {
         cBuf[strlen(cBuf) - 1] = '\0';
     }
