@@ -5,16 +5,12 @@
 
 int parse_command_malloc(const char *line, struct command *cmd)
 {
+    // TODO redirection parsing -> darcy design 그냥 따르자. 잘 모르는거 같은데 더 제대로 하려면 복잡해짐
+    // TODO wordexp() 해주기 (이때는 redirection < > 이 없는 상태, redirection 지시문 전이 \0로 바껴있음)
+
     size_t count = 0;
     cmd->argv = tokenize_malloc(line, " ", &count);
     cmd->argc = count;
-
-    // TODO command line expand 해줘야함! wordexp();
-
-    for (size_t i = 0; i < count; ++i) {
-        // TODO redirect parsing
-
-    }
 
     return 0;
 }
