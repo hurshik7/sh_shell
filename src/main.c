@@ -35,8 +35,8 @@ int main(int argc, char* argv[])
         else {
             // TODO redirect
             execute_command(&cmd);
-            free_command(&cmd);
         }
+        free_command(&cmd);
     }
 
     return 0;
