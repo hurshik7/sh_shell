@@ -27,4 +27,15 @@ void free_command(struct command *cmd)
     }
     free(cmd->argv);
     cmd->argv = NULL;
+
+    if (cmd->args_to_exec != NULL) {
+        int i = 0;
+        while (cmd->args_to_exec[i] != NULL) {
+            free(cmd->args_to_exec[i]);
+            cmd->args_to_exec[i] = NULL;
+            i++;
+        }
+        free(cmd->args_to_exec);
+        cmd->args_to_exec = NULL;
+    }
 }

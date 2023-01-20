@@ -14,6 +14,7 @@ typedef struct command
 {
     size_t argc;
     char **argv;
+    char **args_to_exec;
     char *stdin_file;
     char *stdout_file;
     bool stdout_overwrite;
