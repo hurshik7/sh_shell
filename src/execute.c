@@ -12,21 +12,21 @@ void execute_command(command_t* cmd)
     pid_t child_pid = fork();
     if (child_pid == 0) {
         // child process
-        if (is_path(cmd->argv[0])) {
+        if (is_path(cmd->args_to_exec[0])) {
+            // TODO redirect
             char abs_path[PATH_MAX];
-            char *res = realpath(cmd->argv[0], abs_path);
+            char *res = realpath(cmd->args_to_exec[0], abs_path);
             if (res) {
-                result = execv(abs_path, cmd->argv);
+                result = execv(abs_path, cmd->args_to_exec);
                 if (result < 0) {
                     goto handle_err_and_exit;
                 }
             }
         }
-
-        result = execvp(cmd->argv[0], cmd->argv);
+        result = execvp(cmd->args_to_exec[0], cmd->args_to_exec);
         if (result < 0) {
 handle_err_and_exit:
-            handle_exec_errno(cmd->argv[0]);
+            handle_exec_errno(cmd->args_to_exec[0]);
             cmd->exit_code = errno;
             exit(cmd->exit_code);
         }
