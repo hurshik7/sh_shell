@@ -13,7 +13,7 @@ void execute_command(command_t* cmd)
     if (child_pid == 0) {
         // child process
         if (is_path(cmd->args_to_exec[0])) {
-            // TODO redirect
+            redirect(cmd);
             char abs_path[PATH_MAX];
             char *res = realpath(cmd->args_to_exec[0], abs_path);
             if (res) {
@@ -35,6 +35,7 @@ handle_err_and_exit:
         int status;
         if (waitpid(child_pid, &status, 0) > 0) {
             if (WIFEXITED(status)) {
+                cmd->exit_code = WEXITSTATUS(status);
                 printf("%d\n", WEXITSTATUS(status));
             }
         }
@@ -101,4 +102,9 @@ void handle_exec_errno(const char* command)
         default:
             printf("%s: an error occurred while executing the command (other: errno: %d).\n", command, errno);
     }
+}
+
+void redirect(command_t* cmd)
+{
+    // TODO: 구현!
 }
