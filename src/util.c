@@ -78,3 +78,28 @@ void trim(char* str)
         str[j] = '\0';
     }
 }
+
+int change_to_abs_path(char* filename, char abs_path[MY_PATH_MAX])
+{
+    if (filename == NULL) {
+        return EXIT_FAILURE;
+    }
+
+    if (!is_path(filename)) {
+        strcpy(abs_path, filename);
+        return EXIT_SUCCESS;
+    }
+
+    if (filename[0] == '~') {
+        char *home = getenv("HOME");
+        strcpy(abs_path, home);
+        strcat(abs_path, filename + 1);
+    }
+
+    char* new_path = realpath(abs_path, NULL);
+    if (new_path != NULL) {
+        strcpy(abs_path, new_path);
+        abs_path[strlen(new_path)] = '\0';
+    }
+    return EXIT_SUCCESS;
+}
