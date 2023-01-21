@@ -112,18 +112,18 @@ int redirect(command_t* cmd)
     if (cmd->stdin_file != NULL) {
         char abs_path[PATH_MAX] = { '\0' };
         if (change_to_abs_path(cmd->stdin_file, abs_path) != EXIT_SUCCESS) {
-            perror("Error opening I/O redirection file");
+            fprintf(stderr, "Error opening I/O redirection file\n");
             return EXIT_FAILURE;
         }
         int stdin_redirection_file;
         stdin_redirection_file = open(abs_path, O_RDONLY);
         if (stdin_redirection_file == -1) {
-            perror("Error opening I/O redirection file");
+            fprintf(stderr, "Error opening I/O redirection file\n");
             return EXIT_FAILURE;
         }
         dup2(stdin_redirection_file, STDIN_FILENO);
         if (close(stdin_redirection_file) == -1) {
-            perror("Error closing I/O redirection file");
+            fprintf(stderr, "Error opening I/O redirection file\n");
             return EXIT_FAILURE;
         }
     }
@@ -131,7 +131,7 @@ int redirect(command_t* cmd)
     if (cmd->stdout_file != NULL) {
         char abs_path[PATH_MAX] = { '\0' };
         if (change_to_abs_path(cmd->stdout_file, abs_path) != EXIT_SUCCESS) {
-            perror("Error opening I/O redirection file");
+            fprintf(stderr, "Error opening I/O redirection file\n");
             return EXIT_FAILURE;
         }
         int stdout_redirection_file;
@@ -142,13 +142,13 @@ int redirect(command_t* cmd)
         }
 
         if (stdout_redirection_file == -1) {
-            perror("Error opening I/O redirection file");
+            fprintf(stderr, "Error opening I/O redirection file\n");
             return EXIT_FAILURE;
         }
 
         dup2(stdout_redirection_file, STDOUT_FILENO);
         if (close(stdout_redirection_file) == -1) {
-            perror("Error closing I/O redirection file");
+            fprintf(stderr, "Error opening I/O redirection file\n");
             return EXIT_FAILURE;
         }
     }
@@ -156,7 +156,7 @@ int redirect(command_t* cmd)
     if (cmd->stderr_file != NULL) {
         char abs_path[PATH_MAX] = { '\0' };
         if (change_to_abs_path(cmd->stderr_file, abs_path) != EXIT_SUCCESS) {
-            perror("Error opening I/O redirection file");
+            fprintf(stderr, "Error opening I/O redirection file\n");
             return EXIT_FAILURE;
         }
         int stderr_redirection_file;
@@ -167,13 +167,13 @@ int redirect(command_t* cmd)
         }
 
         if (stderr_redirection_file == -1) {
-            perror("Error opening I/O redirection file");
+            fprintf(stderr, "Error opening I/O redirection file\n");
             return EXIT_FAILURE;
         }
 
         dup2(stderr_redirection_file, STDERR_FILENO);
         if (close(stderr_redirection_file) == -1) {
-            perror("Error closing I/O redirection file");
+            fprintf(stderr, "Error opening I/O redirection file\n");
             return EXIT_FAILURE;
         }
     }
