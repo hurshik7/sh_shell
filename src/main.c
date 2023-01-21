@@ -4,6 +4,7 @@
 #include "input.h"
 #include "util.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 
 #define MAX_LINE_LENGTH (2048)
@@ -21,7 +22,10 @@ int main(int argc, char* argv[])
 
         command_t cmd;
         memset(&cmd, 0, sizeof(command_t));
-        parse_command_malloc(command_line, &cmd);
+        result = parse_command_malloc(command_line, &cmd);
+        if (result != 0) {
+            exit(EXIT_FAILURE);
+        }
 
         // Execute the command
         if (strcmp(cmd.argv[0], "exit") == 0) {
@@ -34,6 +38,7 @@ int main(int argc, char* argv[])
         }
         else {
             // TODO redirect
+            // TODO redirect() 함수 적절한 파일에 만들고 dup2() 할 때 redirection_filename을 realpath()돌려서 Open하기!
             execute_command(&cmd);
         }
         free_command(&cmd);
