@@ -6,7 +6,6 @@
 
 
 #define MAX_LINE_LENGTH (2048)
-#define ERROR_REDIRECT_FILE_NAME_MISSING (1)
 
 
 
@@ -26,5 +25,9 @@ typedef struct command
 
 int parse_command_malloc(const char *line, struct command *cmd);
 void free_command(struct command *cmd);
+char* get_redirection_filename(char** args, size_t current_index, char* ptr);
+void parse_redirection(command_t* command);
+int expand_args_malloc(struct command* cmd);
+
 
 #endif /* SH_SHELL_COMMAND_H */
