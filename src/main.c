@@ -4,12 +4,14 @@
 #include "input.h"
 #include "util.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 
 #define MAX_LINE_LENGTH (2048)
 
 
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 int main(int argc, char* argv[])
 {
     char command_line[MAX_LINE_LENGTH];
@@ -24,7 +26,8 @@ int main(int argc, char* argv[])
         memset(&cmd, 0, sizeof(command_t));
         result = parse_command_malloc(command_line, &cmd);
         if (result != 0) {
-            exit(EXIT_FAILURE);
+            printf("unable to parse: \"%s\"\n", command_line);
+            continue;
         }
 
         // Execute the command
@@ -44,4 +47,5 @@ int main(int argc, char* argv[])
 
     return 0;
 }
+#pragma GCC diagnostic pop
 
