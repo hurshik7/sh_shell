@@ -37,8 +37,6 @@ int main(int argc, char* argv[])
             printf("%d\n", result);
         }
         else {
-            // TODO redirect
-            // TODO redirect() 함수 적절한 파일에 만들고 dup2() 할 때 redirection_filename을 realpath()돌려서 Open하기!
             execute_command(&cmd);
         }
         free_command(&cmd);
