@@ -4,7 +4,7 @@
 
 void execute_command(command_t* cmd);
 void handle_exec_errno(const char* command);
-void redirect(command_t* cmd);
+int redirect(command_t* cmd);
 
 
 #endif /* SH_SHELL_EXECUTE_H */

@@ -2,6 +2,7 @@
 #include "execute.h"
 #include "util.h"
 #include <errno.h>
+#include <fcntl.h>
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,8 +13,10 @@ void execute_command(command_t* cmd)
     pid_t child_pid = fork();
     if (child_pid == 0) {
         // child process
+        if (redirect(cmd) != 0) {
+            exit(126);
+        }
         if (is_path(cmd->args_to_exec[0])) {
-            redirect(cmd);
             char abs_path[PATH_MAX];
             char *res = realpath(cmd->args_to_exec[0], abs_path);
             if (res) {
@@ -104,7 +107,76 @@ void handle_exec_errno(const char* command)
     }
 }
 
-void redirect(command_t* cmd)
+int redirect(command_t* cmd)
 {
-    // TODO: 구현!
+    if (cmd->stdin_file != NULL) {
+        char abs_path[PATH_MAX] = { '\0' };
+        if (change_to_abs_path(cmd->stdin_file, abs_path) != EXIT_SUCCESS) {
+            perror("Error opening I/O redirection file");
+            return EXIT_FAILURE;
+        }
+        int stdin_redirection_file;
+        stdin_redirection_file = open(abs_path, O_RDONLY);
+        if (stdin_redirection_file == -1) {
+            perror("Error opening I/O redirection file");
+            return EXIT_FAILURE;
+        }
+        dup2(stdin_redirection_file, STDIN_FILENO);
+        if (close(stdin_redirection_file) == -1) {
+            perror("Error closing I/O redirection file");
+            return EXIT_FAILURE;
+        }
+    }
+
+    if (cmd->stdout_file != NULL) {
+        char abs_path[PATH_MAX] = { '\0' };
+        if (change_to_abs_path(cmd->stdout_file, abs_path) != EXIT_SUCCESS) {
+            perror("Error opening I/O redirection file");
+            return EXIT_FAILURE;
+        }
+        int stdout_redirection_file;
+        if (cmd->stdout_overwrite == true) {
+            stdout_redirection_file = open(abs_path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        } else {
+            stdout_redirection_file = open(abs_path, O_WRONLY | O_CREAT, 0644);
+        }
+
+        if (stdout_redirection_file == -1) {
+            perror("Error opening I/O redirection file");
+            return EXIT_FAILURE;
+        }
+
+        dup2(stdout_redirection_file, STDOUT_FILENO);
+        if (close(stdout_redirection_file) == -1) {
+            perror("Error closing I/O redirection file");
+            return EXIT_FAILURE;
+        }
+    }
+
+    if (cmd->stderr_file != NULL) {
+        char abs_path[PATH_MAX] = { '\0' };
+        if (change_to_abs_path(cmd->stderr_file, abs_path) != EXIT_SUCCESS) {
+            perror("Error opening I/O redirection file");
+            return EXIT_FAILURE;
+        }
+        int stderr_redirection_file;
+        if (cmd->stderr_overwrite == true) {
+            stderr_redirection_file = open(abs_path, O_WRONLY | O_CREAT | O_APPEND, 0644);
+        } else {
+            stderr_redirection_file = open(abs_path, O_WRONLY | O_CREAT, 0644);
+        }
+
+        if (stderr_redirection_file == -1) {
+            perror("Error opening I/O redirection file");
+            return EXIT_FAILURE;
+        }
+
+        dup2(stderr_redirection_file, STDERR_FILENO);
+        if (close(stderr_redirection_file) == -1) {
+            perror("Error closing I/O redirection file");
+            return EXIT_FAILURE;
+        }
+    }
+
+    return EXIT_SUCCESS;
 }
