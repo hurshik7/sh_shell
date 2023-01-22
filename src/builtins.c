@@ -1,4 +1,5 @@
 #include "builtins.h"
+#include "util.h"
 #include <assert.h>
 #include <errno.h>
 #include <stdlib.h>
@@ -47,3 +48,44 @@ int builtin_cd(char** argv, size_t argc)
     }
     return EXIT_SUCCESS;
 }
+
+int builtin_which(char** argv, size_t size)
+{
+    assert(argv != NULL);
+    if (size < 2) {
+        return EXIT_SUCCESS;
+    }
+
+    size_t count = 0;
+    char** paths = get_path_env_malloc_or_null(&count);
+    if (paths == NULL) {
+        perror("error getting PATH");
+        return EXIT_FAILURE;
+    }
+
+    const char* command = argv[1];
+    int is_found = 1;
+    for (size_t i = 0; i < count; i++) {
+        char temp_path[MY_PATH_MAX]; // MY_PATH_MAX == PATH_MAX, I don't want to add <limits.h> only for the PATH_MAX
+        snprintf(temp_path, sizeof(temp_path), "%s/%s", paths[i], command);
+        if (access(temp_path, F_OK) == 0) {
+            printf("%s\n", temp_path);
+            is_found = 0;
+            break;
+        }
+    }
+    if (is_found == 1) {
+        printf("%s not found\n", command);
+    }
+
+    // free paths
+    size_t i = 0;
+    while (paths[i] != NULL) {
+        free(paths[i]);
+        paths[i++] = NULL;
+    }
+    free(paths);
+    paths = NULL;
+    return is_found;
+}
+
