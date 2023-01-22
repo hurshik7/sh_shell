@@ -22,6 +22,13 @@ set(HEADER_LIST ${INCLUDE_DIR}/command.h
                 ${INCLUDE_DIR}/builtins.h
                 ${INCLUDE_DIR}/execute.h
         )
+set(COMMON_SOURCE_LIST
+        ${SOURCE_DIR}/command.c
+        ${SOURCE_DIR}/util.c
+        ${SOURCE_DIR}/input.c
+        ${SOURCE_DIR}/builtins.c
+        ${SOURCE_DIR}/execute.c
+        )
 
 set(SANITIZE TRUE)
 

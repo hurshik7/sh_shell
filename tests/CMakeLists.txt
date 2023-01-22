@@ -7,11 +7,13 @@ set(TEST_SOURCE_LIST
         command_tests.c
         execute_tests.c
         input_tests.c
+        main.c
         util_tests.c
         )
 
 include_directories(${CGREEN_PUBLIC_INCLUDE_DIRS} ${PROJECT_BINARY_DIR})
-add_executable(sh_shell_test ${TEST_SOURCE_LIST} ${TEST_HEADER_LIST} ${SOURCE_LIST} ${HEADER_LIST})
+add_executable(sh_shell_test
+        ${TEST_SOURCE_LIST} ${TEST_HEADER_LIST} ${COMMON_SOURCE_LIST} ${HEADER_LIST})
 
 target_compile_features(sh_shell_test PRIVATE c_std_17)
 
