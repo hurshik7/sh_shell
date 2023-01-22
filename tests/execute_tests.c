@@ -11,13 +11,28 @@ AfterEach(execute)
 {
 }
 
-Ensure(execute, parse_command_malloc)
+Ensure(execute, execute_command)
 {
 
 }
 
-TestSuite *execute_command_tests(void)
+Ensure(execute, handle_exec_errno)
 {
-    TestSuite *suite;
 
+}
+
+Ensure(execute, redirect)
+{
+
+}
+
+TestSuite *execute_tests(void)
+{
+    TestSuite* suite;
+    suite = create_test_suite();
+    add_test_with_context(suite, execute, execute_command);
+    add_test_with_context(suite, execute, handle_exec_errno);
+    add_test_with_context(suite, execute, redirect);
+
+    return suite;
 }

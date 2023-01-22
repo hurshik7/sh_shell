@@ -11,13 +11,28 @@ AfterEach(input)
 {
 }
 
-Ensure(input, tokenize_malloc)
+Ensure(input, prompt)
 {
 
 }
 
-TestSuite *tokenize_malloc_tests(void)
+Ensure(input, prompt_ps1)
 {
-    TestSuite *suite;
 
+}
+
+Ensure(input, get_command_line)
+{
+
+}
+
+TestSuite* input_tests(void)
+{
+    TestSuite* suite;
+    suite = create_test_suite();
+    add_test_with_context(suite, input, prompt);
+    add_test_with_context(suite, input, prompt_ps1);
+    add_test_with_context(suite, input, get_command_line);
+
+    return suite;
 }

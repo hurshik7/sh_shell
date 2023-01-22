@@ -16,8 +16,35 @@ Ensure(command, parse_command_malloc)
 
 }
 
-TestSuite *parse_command_malloc_tests(void)
+Ensure(command, free_command)
 {
-    TestSuite *suite;
 
+}
+
+Ensure(command, get_redirection_filename)
+{
+
+}
+
+Ensure(command, parse_redirection)
+{
+
+}
+
+Ensure(command, expand_args_malloc)
+{
+
+}
+
+TestSuite* command_tests(void)
+{
+    TestSuite* suite;
+    suite = create_test_suite();
+    add_test_with_context(suite, command, parse_command_malloc);
+    add_test_with_context(suite, command, free_command);
+    add_test_with_context(suite, command, get_redirection_filename);
+    add_test_with_context(suite, command, parse_redirection);
+    add_test_with_context(suite, command, expand_args_malloc);
+
+    return suite;
 }

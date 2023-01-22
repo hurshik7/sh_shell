@@ -16,8 +16,17 @@ Ensure(builtins, builtin_cd)
 
 }
 
-TestSuite *builtin_cd_tests(void)
+Ensure(builtins, builtin_which)
 {
-    TestSuite *suite;
 
+}
+
+TestSuite* builtins_tests(void)
+{
+    TestSuite* suite;
+    suite = create_test_suite();
+    add_test_with_context(suite, builtins, builtin_cd);
+    add_test_with_context(suite, builtins, builtin_which);
+
+    return suite;
 }
