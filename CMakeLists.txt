@@ -190,5 +190,5 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 add_dependencies(${PROJECT_NAME} doxygen)
 
-#find_library(LIBCGREEN cgreen REQUIRED)
-#add_subdirectory(tests)
+find_library(LIBCGREEN cgreen REQUIRED)
+add_subdirectory(tests)
