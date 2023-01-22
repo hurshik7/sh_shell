@@ -9,7 +9,6 @@
 #define MAX_LINE_LENGTH (2048)
 
 
-
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 int main(int argc, char* argv[])
