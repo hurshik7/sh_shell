@@ -104,3 +104,14 @@ int change_to_abs_path(char* filename, char abs_path[MY_PATH_MAX])
     }
     return EXIT_SUCCESS;
 }
+
+char** get_path_env_malloc_or_null(size_t* path_count_out)
+{
+    char* path = getenv("PATH");
+    if (path == NULL) {
+        return NULL;
+    }
+    char** ret_paths = tokenize_malloc(path, ":", path_count_out);
+    return ret_paths;
+}
+
