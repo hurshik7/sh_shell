@@ -100,6 +100,7 @@ int change_to_abs_path(char* filename, char abs_path[MY_PATH_MAX])
     if (new_path != NULL) {
         strcpy(abs_path, new_path);
         abs_path[strlen(new_path)] = '\0';
+        free(new_path);
     }
     return EXIT_SUCCESS;
 }
