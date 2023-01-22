@@ -26,19 +26,19 @@ int builtin_cd(char** argv, size_t argc)
         if (chdir(argv[1]) < 0) {
             switch (errno) {
                 case EACCES:
-                    printf("cd: permission denied: %s\n", argv[1]);
+                    fprintf(stderr, "cd: permission denied: %s\n", argv[1]);
                     break;
                 case ELOOP:
-                    printf("cd: too many symbolic links: %s\n", argv[1]);
+                    fprintf(stderr, "cd: too many symbolic links: %s\n", argv[1]);
                     break;
                 case ENAMETOOLONG:
-                    printf("cd: file name too long: %s\n", argv[1]);
+                    fprintf(stderr, "cd: file name too long: %s\n", argv[1]);
                     break;
                 case ENOENT:
-                    printf("cd: no such file or directory: %s\n", argv[1]);
+                    fprintf(stderr, "cd: no such file or directory: %s\n", argv[1]);
                     break;
                 case ENOTDIR:
-                    printf("cd: not a directory: %s\n", argv[1]);
+                    fprintf(stderr, "cd: not a directory: %s\n", argv[1]);
                     break;
                 default:
                     assert("cannot be here");
@@ -75,7 +75,7 @@ int builtin_which(char** argv, size_t size)
         }
     }
     if (is_found == 1) {
-        printf("%s not found\n", command);
+        fprintf(stderr, "%s not found\n", command);
     }
 
     // free paths
