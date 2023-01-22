@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
             break;
         }
         else if (strcmp(cmd.argv[0], "cd") == 0) {
-            result = builtin_cd(cmd.argv, cmd.argc);
+            result = builtin_cd(cmd.args_to_exec, cmd.argc);
             printf("%d\n", result);
         }
         else if (strcmp(cmd.argv[0], "which") == 0) {
