@@ -39,6 +39,10 @@ int main(int argc, char* argv[])
             result = builtin_cd(cmd.argv, cmd.argc);
             printf("%d\n", result);
         }
+        else if (strcmp(cmd.argv[0], "which") == 0) {
+            result = builtin_which(cmd.argv, cmd.argc);
+            printf("%d\n", result);
+        }
         else {
             execute_command(&cmd);
         }
