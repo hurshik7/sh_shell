@@ -19,7 +19,7 @@ int builtin_cd(char** argv, size_t argc);
  * @param argc a positive integer represents the number of arguments in argv
  * @return an integer represent the status after searching a program or file in the PATH
  */
-int builtin_which(char** argv, size_t size);
+int builtin_which(char** argv, size_t argc);
 
 
 #endif /* SH_SHELL_BUILTINS_H */

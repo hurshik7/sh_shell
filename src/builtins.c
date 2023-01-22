@@ -49,10 +49,10 @@ int builtin_cd(char** argv, size_t argc)
     return EXIT_SUCCESS;
 }
 
-int builtin_which(char** argv, size_t size)
+int builtin_which(char** argv, size_t argc)
 {
     assert(argv != NULL);
-    if (size < 2) {
+    if (argc < 2) {
         return EXIT_SUCCESS;
     }
 
