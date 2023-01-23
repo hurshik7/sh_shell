@@ -55,6 +55,10 @@ int builtin_which(char** argv, size_t argc)
     if (argc < 2) {
         return EXIT_SUCCESS;
     }
+    if (strcmp(argv[1], "cd") == 0 || strcmp(argv[1], "which") == 0) {
+        printf("%s: sh_shell built-in command\n", argv[1]);
+        return EXIT_SUCCESS;
+    }
 
     size_t count = 0;
     char** paths = get_path_env_malloc_or_null(&count);
