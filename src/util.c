@@ -74,6 +74,7 @@ void trim(char* str)
     while (str[i]) {
         str[j++] = str[i++];
     }
+    str[j] = '\0';
     while (isspace(str[--j])) {
         str[j] = '\0';
     }
