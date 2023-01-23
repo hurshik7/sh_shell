@@ -130,9 +130,11 @@ int expand_args_malloc(struct command* cmd)
                     }
                 }
 
-                size_t src_arg_size = strlen((result.we_wordv)[j]);
+                char abs_path[MY_PATH_MAX] = { '\0' };
+                change_to_abs_path(result.we_wordv[j], abs_path);
+                size_t src_arg_size = strlen(abs_path);
                 (cmd->args_to_exec)[count] = (char*) malloc(src_arg_size + 1);
-                strncpy((cmd->args_to_exec)[count], (result.we_wordv)[j], src_arg_size);
+                strncpy((cmd->args_to_exec)[count], abs_path, src_arg_size);
                 cmd->args_to_exec[count][src_arg_size] = '\0';
                 count++;
             }
