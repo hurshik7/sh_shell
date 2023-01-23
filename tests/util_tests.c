@@ -1,6 +1,8 @@
 #include "tests.h"
 #include "util.h"
 
+void free_string_array(char** arr);
+
 Describe(util);
 
 BeforeEach(util) // before each test, invoke this first!
@@ -13,7 +15,62 @@ AfterEach(util)
 
 Ensure(util, tokenize_malloc)
 {
-    // TODO
+    char input1[] = "ls -l > out.txt";
+    char input2[] = "ls";
+    char input3[] = "  ls";
+    char input4[] = "ls  ";
+    char input5[] = "ls     ";
+    char input6[] = "   ls";
+    char input7[] = "cat     <     in.txt  ";
+    char input8[] = "Hello:world !!!";
+
+    size_t count = 0;
+    char** tokens = tokenize_malloc(input1, " ", &count);
+    assert_string_equal(tokens[0], "ls");
+    assert_string_equal(tokens[1], "-l");
+    assert_string_equal(tokens[2], ">");
+    assert_string_equal(tokens[3], "out.txt");
+    assert_equal(count, 4);
+    free_string_array(tokens);
+
+    tokens = tokenize_malloc(input2, " ", &count);
+    assert_equal(count, 1);
+    assert_string_equal(tokens[0], "ls");
+    free_string_array(tokens);
+
+    tokens = tokenize_malloc(input3, " ", &count);
+    assert_equal(count, 1);
+    assert_string_equal(tokens[0], "ls");
+    free_string_array(tokens);
+
+    tokens = tokenize_malloc(input4, " ", &count);
+    assert_equal(count, 1);
+    assert_string_equal(tokens[0], "ls");
+    free_string_array(tokens);
+
+    tokens = tokenize_malloc(input5, " ", &count);
+    assert_equal(count, 1);
+    assert_string_equal(tokens[0], "ls");
+    free_string_array(tokens);
+
+    tokens = tokenize_malloc(input6, " ", &count);
+    assert_equal(count, 1);
+    assert_string_equal(tokens[0], "ls");
+    free_string_array(tokens);
+
+    tokens = tokenize_malloc(input7, " ", &count);
+    assert_equal(count, 3);
+    assert_string_equal(tokens[0], "cat");
+    assert_string_equal(tokens[1], "<");
+    assert_string_equal(tokens[2], "in.txt");
+    free_string_array(tokens);
+
+    tokens = tokenize_malloc(input8, " :", &count);
+    assert_equal(count, 3);
+    assert_string_equal(tokens[0], "Hello");
+    assert_string_equal(tokens[1], "world");
+    assert_string_equal(tokens[2], "!!!");
+    free_string_array(tokens);
 }
 
 Ensure(util, is_path)
@@ -89,8 +146,27 @@ Ensure(util, change_to_abs_path)
 
 Ensure(util, get_path_env_malloc_or_null)
 {
-    // TODO 여기서부터
+    size_t count = 0;
+    char** paths = get_path_env_malloc_or_null(&count);
+    assert_equal(count, 15); // on my system, there are 15 tokens in PATH environment variable
+    assert_string_equal(paths[0], "/usr/local/sbin");
+    assert_string_equal(paths[1], "/usr/local/opt/llvm/bin");
+    assert_string_equal(paths[2], "/usr/local/bin");
+    assert_string_equal(paths[3], "/System/Cryptexes/App/usr/bin");
+    assert_string_equal(paths[4], "/usr/bin");
+    assert_string_equal(paths[5], "/bin");
+    assert_string_equal(paths[6], "/usr/sbin");
+    assert_string_equal(paths[7], "/sbin");
+    assert_string_equal(paths[8], "/usr/local/share/dotnet");
+    assert_string_equal(paths[9], "/opt/X11/bin");
+    assert_string_equal(paths[10], "~/.dotnet/tools");
+    assert_string_equal(paths[11], "/Library/Apple/usr/bin");
+    assert_string_equal(paths[12], "/Library/Frameworks/Mono.framework/Versions/Current/Commands");
+    assert_string_equal(paths[13], "/Applications/Wireshark.app/Contents/MacOS");
+    assert_string_equal(paths[14], "/Applications/CLion.app/Contents/bin/ninja/mac");
+    assert_equal(paths[15], NULL);
 
+    free_string_array(paths);
 }
 
 TestSuite* util_tests(void)
@@ -105,3 +181,15 @@ TestSuite* util_tests(void)
 
     return suite;
 }
+
+void free_string_array(char** arr)
+{
+    size_t count = 0;
+    while (arr[count] != NULL) {
+        free(arr[count]);
+        arr[count++] = NULL;
+    }
+    free(arr);
+    arr = NULL;
+}
+
