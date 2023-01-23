@@ -95,6 +95,8 @@ int change_to_abs_path(char* filename, char abs_path[MY_PATH_MAX])
         char *home = getenv("HOME");
         strcpy(abs_path, home);
         strcat(abs_path, filename + 1);
+    } else {
+        strcpy(abs_path, filename);
     }
 
     char* new_path = realpath(abs_path, NULL);
