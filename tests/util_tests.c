@@ -168,11 +168,11 @@ Ensure(util, get_path_env_malloc_or_null)
 
     free_string_array(paths);
 
-    unsetenv("PATH");
+    unsetenv("PATH");                                                       // NOLINT(concurrency-mt-unsafe)
     paths = get_path_env_malloc_or_null(&count);
     assert_that(paths, is_null);
 
-    setenv("PATH", "/usr/local/sbin", true);
+    setenv("PATH", "/usr/local/sbin", true);                                // NOLINT(concurrency-mt-unsafe)
     paths = get_path_env_malloc_or_null(&count);
     assert_that(count, is_equal_to(1));
     assert_that(paths[0], is_equal_to_string("/usr/local/sbin"));
