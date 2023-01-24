@@ -4,9 +4,6 @@
 #include <unistd.h>
 
 
-#define HOST_NAME_MAX_LEN (256)
-
-
 static void test_get_command_line(const char* data, const char* expected_line);
 static void do_test_get_command_line(const char* stream, const char* expected_line);
 static void test_prompt(const char* data, const char* expected_line);
@@ -104,13 +101,13 @@ TestSuite* input_tests(void)
 
 static void test_get_command_line(const char* data, const char* expected_line)
 {
-    FILE *file = fopen("input.txt", "w");
+    FILE *file = fopen("input.txt", "w");                   // NOLINT(android-cloexec-fopen)
     if (file == NULL) {
         printf("Error creating input file\n");
         return;
     }
-    fprintf(file, "%s", data);
-    fclose(file);
+    fprintf(file, "%s", data);                              // NOLINT(cert-err33-c)
+    fclose(file);                                           // NOLINT(cert-err33-c)
     do_test_get_command_line("input.txt", expected_line);
 }
 
@@ -131,13 +128,13 @@ static void do_test_get_command_line(const char* stream, const char* expected_li
 
 static void test_prompt(const char* data, const char* expected_line)
 {
-    FILE *file = fopen("input.txt", "w");
+    FILE *file = fopen("input.txt", "w");                               // NOLINT(android-cloexec-fopen)
     if (file == NULL) {
         printf("Error creating input file\n");
         return;
     }
-    fprintf(file, "%s", data);
-    fclose(file);
+    fprintf(file, "%s", data);                                          // NOLINT(cert-err33-c)
+    fclose(file);                                                       // NOLINT(cert-err33-c)
     do_test_prompt("input.txt", expected_line);
 }
 

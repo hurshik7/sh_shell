@@ -1,6 +1,6 @@
 #include "command.h"
-#include "tests.h"
 #include "execute.h"
+#include "tests.h"
 #include <sys/fcntl.h>
 
 
