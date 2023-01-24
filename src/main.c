@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
         result = parse_command_malloc(command_line, &cmd);
         if (result != 0) {
             printf("unable to parse: \"%s\"\n", command_line);
-            continue;
+            goto free_and_continue;
         }
 
         // Execute the command
@@ -46,6 +46,7 @@ int main(int argc, char* argv[])
         else {
             execute_command(&cmd);
         }
+free_and_continue:
         free_command(&cmd);
     }
 
