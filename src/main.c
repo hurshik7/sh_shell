@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
         // Execute the command
         if (strcmp(cmd.argv[0], "exit") == 0) {
             free_command(&cmd);
-            exit(EXIT_SUCCESS);
+            exit(EXIT_SUCCESS);                             // NOLINT(concurrency-mt-unsafe)
         }
         else if (strcmp(cmd.argv[0], "cd") == 0) {
             result = builtin_cd(cmd.args_to_exec, cmd.argc);

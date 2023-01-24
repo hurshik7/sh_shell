@@ -97,7 +97,7 @@ void parse_redirection(command_t* command)      // NOLINT(readability-function-c
     }
 }
 
-int expand_args_malloc(struct command* cmd)
+int expand_args_malloc(struct command* cmd)                                     // NOLINT(readability-function-cognitive-complexity)
 {
     size_t args_count = cmd->argc;
     size_t count = 0;
@@ -117,7 +117,7 @@ int expand_args_malloc(struct command* cmd)
         }
 
         wordexp_t result;
-        int ret = wordexp(src_arg, &result, 0);
+        int ret = wordexp(src_arg, &result, 0);                         // NOLINT(concurrency-mt-unsafe)
         if (ret == 0) {
             for (size_t j = 0; j < result.we_wordc; j++) {
                 if (count >= max_count) {
