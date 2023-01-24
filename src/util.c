@@ -1,6 +1,7 @@
 #include "util.h"
-#include <stdlib.h>
 #include <ctype.h>
+#include <stdlib.h>
+
 
 char** tokenize_malloc(const char* str, const char* delim, size_t* out_count)
 {
@@ -18,7 +19,7 @@ char** tokenize_malloc(const char* str, const char* delim, size_t* out_count)
 
     ret = malloc(ret_size * sizeof(char*));
 
-    token = strtok(temp_str, delim);
+    token = strtok(temp_str, delim);                            // NOLINT(concurrency-mt-unsafe)
     if (token == NULL) {
         ret[0] = NULL;
         goto free_and_exit;
@@ -41,7 +42,7 @@ char** tokenize_malloc(const char* str, const char* delim, size_t* out_count)
             ret[word_count - 1][strlen(ret[word_count - 1]) - 1] = '\0';
         }
 
-        token = strtok(NULL, delim);
+        token = strtok(NULL, delim);                            // NOLINT(concurrency-mt-unsafe)
     }
 
     ret[word_count] = NULL;
@@ -92,9 +93,11 @@ int change_to_abs_path(char* filename, char abs_path[MY_PATH_MAX])
     }
 
     if (filename[0] == '~') {
-        char *home = getenv("HOME");
-        strcpy(abs_path, home);
-        strcat(abs_path, filename + 1);
+        char *home = getenv("HOME");                                    // NOLINT(concurrency-mt-unsafe)
+        if (home != NULL) {
+            strcpy(abs_path, home);
+            strcat(abs_path, filename + 1);
+        }
     } else {
         strcpy(abs_path, filename);
     }
@@ -110,7 +113,7 @@ int change_to_abs_path(char* filename, char abs_path[MY_PATH_MAX])
 
 char** get_path_env_malloc_or_null(size_t* path_count_out)
 {
-    char* path = getenv("PATH");
+    char* path = getenv("PATH");                                        // NOLINT(concurrency-mt-unsafe)
     if (path == NULL) {
         return NULL;
     }

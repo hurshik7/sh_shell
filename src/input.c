@@ -7,11 +7,14 @@
 #include <unistd.h>
 
 
+#define HOST_NAME_MAX_LEN (256)
+
+
 void* prompt(char cBuf[])
 {
     void *ret;
-    char *ps1 = getenv("PS1");
-    char cwd[1024];
+    char *ps1 = getenv("PS1");                          // NOLINT(concurrency-mt-unsafe)
+    char cwd[MY_PATH_MAX];
     getcwd(cwd, sizeof(cwd));
 
     if (ps1 != NULL) {
@@ -19,7 +22,7 @@ void* prompt(char cBuf[])
     } else {
         printf("[%s] $ ", cwd);
     }
-    fflush(stdout);
+    fflush(stdout);                                     // NOLINT(cert-err33-c)
 
     ret = get_command_line(cBuf);
     return ret;
@@ -27,8 +30,8 @@ void* prompt(char cBuf[])
 
 void prompt_ps1(const char* ps1, const char* cwd)
 {
-    char *username = getlogin();
-    char hostname[256];
+    char *username = getlogin();                        // NOLINT(concurrency-mt-unsafe)
+    char hostname[HOST_NAME_MAX_LEN];
     gethostname(hostname, sizeof(hostname));
 
     const char *ptr = ps1;
@@ -69,7 +72,7 @@ char* get_command_line(char cBuf[])
     ret = fgets(cBuf, MAX_LINE_LEN, stdin);
     if (ret == NULL) {
         if (ferror(stdin)) {
-            printf("fgets: error reading input: %s\n", strerror(errno));
+            printf("fgets: error reading input: %s\n", strerror(errno));            // NOLINT(concurrency-mt-unsafe)
         } else {
             printf("fgets: end of file reached\n");
         }
