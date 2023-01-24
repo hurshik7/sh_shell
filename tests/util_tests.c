@@ -163,7 +163,7 @@ Ensure(util, get_path_env_malloc_or_null)
     assert_string_equal(paths[11], "/Library/Apple/usr/bin");
     assert_string_equal(paths[12], "/Library/Frameworks/Mono.framework/Versions/Current/Commands");
     assert_string_equal(paths[13], "/Applications/Wireshark.app/Contents/MacOS");
-    assert_string_equal(paths[14], "/Applications/CLion.app/Contents/bin/ninja/mac");
+    assert_string_equal(paths[14], "/Applications/CLion.app/Contents/bin/ninja/mac");   // if you run the test on CLion
     assert_equal(paths[15], NULL);
 
     free_string_array(paths);
