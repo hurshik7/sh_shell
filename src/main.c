@@ -4,6 +4,7 @@
 #include "input.h"
 #include "util.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 
 #define MAX_LINE_LENGTH (2048)
@@ -32,7 +33,7 @@ int main(int argc, char* argv[])
         // Execute the command
         if (strcmp(cmd.argv[0], "exit") == 0) {
             free_command(&cmd);
-            break;
+            exit(EXIT_SUCCESS);
         }
         else if (strcmp(cmd.argv[0], "cd") == 0) {
             result = builtin_cd(cmd.args_to_exec, cmd.argc);
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
         free_command(&cmd);
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 #pragma GCC diagnostic pop
 

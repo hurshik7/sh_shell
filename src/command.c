@@ -52,7 +52,8 @@ char* get_redirection_filename(char** args, size_t current_index, char* ptr)
     return ret;
 }
 
-void parse_redirection(command_t* command)
+
+void parse_redirection(command_t* command)      // NOLINT(readability-function-cognitive-complexity)
 {
     if (command->argc < 2) {
         return;
