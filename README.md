@@ -1,29 +1,21 @@
 # sh_shell
 
-# Purpose
+## Purpose
 
 sh_shell is a simple Unix shell that supports:
-
-
 
 * running simple commands
 * redirecting stdin, stdout, and stderr
 
-
-# Intended Users
+## Intended Users
 
 This guide is intended for users who have basic experience with the POSIX system.
-
-
 
 * Users who can run a program using a terminal on a POSIX system
 * Users who know what the command line arguments and flags are
 * Users who know how to use cmake.
 
-
-# Software Requirements
-
-
+## Software Requirements
 
 * Clang-tidy
 * Cmake
@@ -33,21 +25,15 @@ This guide is intended for users who have basic experience with the POSIX system
 * Cgreen (cgreen is a framework for unit testing. It's not essential for running sh_shell, so if you don't have it installed or don't want the unit testing program, edit the CMakeLists.txt files.)
 * libasan, libubsan (for Fedora)
 
-
-# Platform
-
-
+## Platform
 
 * macOS 13.2 (Ventura)
 * Fedora 37
 
 I tested programs on macOS and Fedora Linux (Fedora 37).
 
-
-# Installing
-
-
-## Obtaining
+## Installing
+### Obtaining
 
 Clone this repo by running following command.
 
@@ -55,45 +41,33 @@ Clone this repo by running following command.
 git clone https://github.com/hurshik7/sh_shell.git
 ```
 
-
 Then, you can see the `source` directory.
 
-
-## Building & Installing
+### Building & Installing
 
 go into the `source/` directory and build the sh_shell with the following commands.
-
 
 ```
 cd source
 cmake -S . -B build
 cmake --build build
 ```
-
-
 The compiler can be specified by passing one of the following to cmake:
-
-
 
 * `-DCMAKE_C_COMPILER="gcc"`
 * `-DCMAKE_C_COMPILER="clang"`
 
 (For example, `cmake -S . -B build -DCMAKE_C_COMPILER="gcc")`
 
-
-## Running
-
+### Running
 
 ```
 ./build/sh_shell
 ```
 
-
-
 ## Environment Variables
 
 The following environment variables alter the behaviour of sh_shell:
-
 
 <table>
   <tr>
@@ -117,17 +91,14 @@ The following environment variables alter the behaviour of sh_shell:
 </table>
 
 
-
-# Features
-
-
+## Features
 
 * sh_shell only supports executing simple commands with optional I/O redirection
 * The PATH environment variable is searched for each command
 * After a command completes, the exit status is displayed.
 
 
-## Built-in Commands
+### Built-in Commands
 
 sh_shell supports the following built-in commands:
 
@@ -162,8 +133,6 @@ sh_shell supports the following built-in commands:
 
 
 ## Limitations
-
-
 
 * A program name has a space it cannot be run
 * Tab completion is not implemented
